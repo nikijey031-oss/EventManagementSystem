@@ -26,4 +26,7 @@ bin/
 .vscode/
 
 ### Mac OS ###
-.DS_Store\n\ntarget/\n
+.DS_Store
+
+target/
+\n
