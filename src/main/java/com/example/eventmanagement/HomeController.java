@@ -26,6 +26,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
+        model.addAttribute("activePage", "dashboard");
         model.addAttribute("events", eventService.getEvents());
         model.addAttribute("eventCount", eventService.getEvents().size());
         model.addAttribute("participantCount", participantService.getParticipants().size());
@@ -34,6 +35,7 @@ public class HomeController {
 
     @GetMapping("/events")
     public String events(@RequestParam(required = false) String query, Model model) {
+        model.addAttribute("activePage", "events");
         model.addAttribute("events", eventService.searchEvents(query));
         model.addAttribute("query", query == null ? "" : query);
         return "events/list";
@@ -111,6 +113,7 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("error", "Event not found.");
             return "redirect:/events";
         }
+        model.addAttribute("activePage", "events");
         model.addAttribute("event", event);
         model.addAttribute("participants", participantService.findByEventId(id));
         return "events/participants";
@@ -118,6 +121,7 @@ public class HomeController {
 
     @GetMapping("/participants")
     public String participants(@RequestParam(required = false) String query, Model model) {
+        model.addAttribute("activePage", "participants");
         model.addAttribute("participants", participantService.searchParticipants(query));
         model.addAttribute("events", eventService.getEvents());
         model.addAttribute("query", query == null ? "" : query);
@@ -130,6 +134,7 @@ public class HomeController {
         if (eventId != null) {
             participant.setEventId(eventId);
         }
+        model.addAttribute("activePage", "participants");
         model.addAttribute("participant", participant);
         model.addAttribute("events", eventService.getEvents());
         return "participants/form";
