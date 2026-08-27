@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Event participants | Gatherly</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body><nav th:replace="~{fragments :: navbar}"></nav>
+<main class="page-shell"><div th:replace="~{fragments :: alerts}"></div>
+    <a class="back-link" th:href="@{/events}">← Back to events</a>
+    <div class="event-detail-header"><div><p class="eyebrow">EVENT PARTICIPANTS</p><h1 th:text="${event.eventName}">Event name</h1><div class="detail-meta"><span>◷ <strong th:text="${event.eventDate}">Date</strong></span><span>⌖ <strong th:text="${event.venue}">Venue</strong></span></div></div><a class="button button-primary" th:href="@{/participants/new(eventId=${event.eventId})}">+ Register participant</a></div>
+    <section class="participant-summary"><div class="summary-number" th:text="${#lists.size(participants)}">0</div><div><strong>Registered participants</strong><p>Everyone currently connected to this event.</p></div></section>
+    <section class="table-card" th:if="${!#lists.isEmpty(participants)}"><div class="table-wrap"><table><thead><tr><th>Participant</th><th>Registration ID</th><th class="align-right">Actions</th></tr></thead><tbody><tr th:each="participant : ${participants}"><td><div class="table-event"><span class="avatar" th:text="${#strings.substring(participant.name, 0, 1).toUpperCase()}">P</span><strong th:text="${participant.name}">Participant</strong></div></td><td th:text="'#' + ${participant.participantId}">ID</td><td class="align-right"><form method="post" th:action="@{/participants/{id}/delete(id=${participant.participantId})}" onsubmit="return confirm('Remove this participant?');"><button class="icon-button danger" title="Delete" type="submit">⌫</button></form></td></tr></tbody></table></div></section>
+    <div class="empty-state compact" th:if="${#lists.isEmpty(participants)}"><div class="empty-icon">♧</div><h3>No one has registered yet</h3><p>Invite your first participant to this event.</p><a class="button button-primary" th:href="@{/participants/new(eventId=${event.eventId})}">Register participant</a></div>
+</main><div th:replace="~{fragments :: footer}"></div></body></html>
