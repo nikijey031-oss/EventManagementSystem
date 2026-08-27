@@ -1,12 +1,15 @@
 package service;
 
 import model.Participant;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
+@Service
 public class ParticipantService {
 
-    ArrayList<Participant> participants = new ArrayList<>();
+    private final ArrayList<Participant> participants = new ArrayList<>();
 
     // REGISTER PARTICIPANT
     public void addParticipant(Participant participant) {
@@ -16,54 +19,83 @@ public class ParticipantService {
 
     // VIEW PARTICIPANTS
     public void viewParticipants() {
-
         if (participants.isEmpty()) {
             System.out.println("No participants registered.");
             return;
         }
 
         System.out.println("\n===== ALL PARTICIPANTS =====");
-
         for (Participant p : participants) {
-            System.out.println(
-                    "ID: " + p.getParticipantId()
-                            + " | Name: " + p.getName()
-            );
+            System.out.println("ID: " + p.getParticipantId()
+                    + " | Name: " + p.getName()
+                    + " | Event ID: " + p.getEventId());
         }
     }
 
-    // SEARCH PARTICIPANT
+    // SEARCH PARTICIPANT (console-compatible API)
     public void searchParticipant(int id) {
-
-        for (Participant p : participants) {
-
-            if (p.getParticipantId() == id) {
-
-                System.out.println("\nParticipant Found");
-                System.out.println("ID: " + p.getParticipantId());
-                System.out.println("Name: " + p.getName());
-
-                return;
-            }
+        Participant participant = findById(id);
+        if (participant == null) {
+            System.out.println("Participant Not Found.");
+            return;
         }
 
-        System.out.println("Participant Not Found.");
+        System.out.println("\nParticipant Found");
+        System.out.println("ID: " + participant.getParticipantId());
+        System.out.println("Name: " + participant.getName());
+        System.out.println("Event ID: " + participant.getEventId());
     }
 
     // DELETE PARTICIPANT
     public void deleteParticipant(int id) {
+        if (deleteParticipantAndReturn(id)) {
+            System.out.println("Participant Removed Successfully.");
+        } else {
+            System.out.println("Participant Not Found.");
+        }
+    }
 
-        for (Participant p : participants) {
+    public Participant findById(int id) {
+        for (Participant participant : participants) {
+            if (participant.getParticipantId() == id) return participant;
+        }
+        return null;
+    }
 
-            if (p.getParticipantId() == id) {
+    public boolean deleteParticipantAndReturn(int id) {
+        return participants.removeIf(participant -> participant.getParticipantId() == id);
+    }
 
-                participants.remove(p);
+    public void deleteByEventId(int eventId) {
+        participants.removeIf(participant -> participant.getEventId() == eventId);
+    }
 
-                System.out.println("Participant Removed Successfully.");
-                return;
-            }
+    public ArrayList<Participant> findByEventId(int eventId) {
+        ArrayList<Participant> matches = new ArrayList<>();
+        for (Participant participant : participants) {
+            if (participant.getEventId() == eventId) matches.add(participant);
+        }
+        return matches;
+    }
+
+    public ArrayList<Participant> searchParticipants(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return new ArrayList<>(participants);
         }
 
-        System.out.println("Participant Not Found.");
+        String normalized = query.trim().toLowerCase(Locale.ROOT);
+        ArrayList<Participant> matches = new ArrayList<>();
+        for (Participant participant : participants) {
+            if (String.valueOf(participant.getParticipantId()).contains(normalized)
+                    || (participant.getName() != null
+                    && participant.getName().toLowerCase(Locale.ROOT).contains(normalized))) {
+                matches.add(participant);
+            }
+        }
+        return matches;
+    }
+
+    public ArrayList<Participant> getParticipants() {
+        return participants;
     }
 }
