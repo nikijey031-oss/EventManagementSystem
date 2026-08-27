@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title th:text="${pageTitle} + ' | Gatherly'">Event | Gatherly</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body><nav th:replace="~{fragments :: navbar}"></nav>
+<main class="page-shell narrow"><div th:replace="~{fragments :: alerts}"></div>
+    <a class="back-link" th:href="@{/events}">← Back to events</a>
+    <div class="form-heading"><p class="eyebrow">EVENT DETAILS</p><h1 th:text="${pageTitle}">Add event</h1><p class="muted">Give your gathering a clear home on the calendar.</p></div>
+    <form class="form-card" method="post" th:action="${formAction}" th:object="${event}">
+        <div class="form-grid"><div class="field"><label for="eventId">Event ID</label><input id="eventId" type="number" min="1" required th:field="*{eventId}" th:readonly="${pageTitle == 'Update event'}"><small>Use a unique positive number.</small></div><div class="field"><label for="eventName">Event name</label><input id="eventName" type="text" maxlength="100" required th:field="*{eventName}" placeholder="e.g. Product launch breakfast"></div><div class="field"><label for="eventDate">Date</label><input id="eventDate" type="date" required th:field="*{eventDate}"></div><div class="field"><label for="venue">Venue</label><input id="venue" type="text" maxlength="120" required th:field="*{venue}" placeholder="e.g. The Atrium, Building A"></div></div>
+        <div class="form-footer"><span class="required-note">* Required fields</span><div class="form-actions"><a class="button button-ghost" th:href="@{/events}">Cancel</a><button class="button button-primary" type="submit" th:text="${pageTitle == 'Update event' ? 'Save changes' : 'Create event'}">Create event</button></div></div>
+    </form>
+</main><div th:replace="~{fragments :: footer}"></div></body></html>
