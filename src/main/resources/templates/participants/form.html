@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Register participant | Gatherly</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body><nav th:replace="~{fragments :: navbar}"></nav>
+<main class="page-shell narrow"><div th:replace="~{fragments :: alerts}"></div>
+    <a class="back-link" th:href="@{/participants}">← Back to participants</a>
+    <div class="form-heading"><p class="eyebrow">REGISTRATION</p><h1>Register participant</h1><p class="muted">Add a guest and connect them to the right event.</p></div>
+    <form class="form-card" method="post" th:action="@{/participants}" th:object="${participant}">
+        <div class="form-grid"><div class="field"><label for="participantId">Participant ID</label><input id="participantId" type="number" min="1" required th:field="*{participantId}" placeholder="e.g. 101"><small>Use a unique positive number.</small></div><div class="field"><label for="name">Full name</label><input id="name" type="text" maxlength="100" required th:field="*{name}" placeholder="e.g. Maya Chen"></div><div class="field full-width"><label for="eventId">Event</label><select id="eventId" th:field="*{eventId}"><option value="0">General registration (no event selected)</option><option th:each="event : ${events}" th:value="${event.eventId}" th:text="${event.eventName} + ' · ' + ${event.eventDate}">Event</option></select><small>Registering from an event automatically selects it here.</small></div></div>
+        <div class="form-footer"><span class="required-note">* Required fields</span><div class="form-actions"><a class="button button-ghost" th:href="@{/participants}">Cancel</a><button class="button button-primary" type="submit">Register participant</button></div></div>
+    </form>
+</main><div th:replace="~{fragments :: footer}"></div></body></html>
