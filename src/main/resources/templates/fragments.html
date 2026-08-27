@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar" class="navbar">
+    <a class="brand" th:href="@{/}"><span class="brand-mark">✦</span><span>Gatherly</span></a>
+    <div class="nav-links">
+        <a th:href="@{/}" th:classappend="${activePage == 'dashboard' ? 'active' : ''}">Dashboard</a>
+        <a th:href="@{/events}" th:classappend="${activePage == 'events' ? 'active' : ''}">Events</a>
+        <a th:href="@{/participants}" th:classappend="${activePage == 'participants' ? 'active' : ''}">Participants</a>
+    </div>
+    <a class="nav-action" th:href="@{/events/new}">+ New event</a>
+</nav>
+
+<div th:fragment="alerts" class="alerts">
+    <div th:if="${success}" class="alert alert-success"><span>✓</span><span th:text="${success}"></span></div>
+    <div th:if="${error}" class="alert alert-error"><span>!</span><span th:text="${error}"></span></div>
+</div>
+
+<footer th:fragment="footer" class="footer">
+    <span>Gatherly Event Management</span><span>Plan with purpose. Meet with meaning.</span>
+</footer>
+</body>
+</html>
